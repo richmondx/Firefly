@@ -27,7 +27,7 @@ AFireflyPawn::AFireflyPawn() {
 
 	// Create the mesh component.
 	m_mesh = CreateDefaultSubobject<UFireflyMeshComponent>(TEXT("FireflyMeshComponent0"));
-	m_mesh->CastShadow = false;
+	m_mesh->SetCastShadow(false);
 	m_mesh->SetCollisionProfileName(TEXT("FireflyMesh"));
 	m_mesh->bGenerateOverlapEvents = false;
 	m_mesh->SetNotifyRigidBodyCollision(false);
@@ -49,9 +49,15 @@ AFireflyPawn::AFireflyPawn() {
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	m_camera->AttachTo(m_springArm, USpringArmComponent::SocketName);
 	m_camera->SetRelativeLocation(FVector(0.0f, 0.0f, 600.0f));
-	m_camera->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 3000.0f), FRotator(-90.f, 0.f, 0.f));
+	m_camera->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 200.0f), FRotator(-90.f, 0.f, 0.f));
 	m_camera->FieldOfView = 70.f;
 	m_camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
+
+	// Create the point light.
+	m_light = CreateDefaultSubobject<UPointLightComponent>(TEXT("PointLight0"));
+	m_light->AttachTo(RootComponent);
+	m_light->SetIntensity(20000.f);
+	m_light->SetLightColor(FLinearColor(1.f, 0.165f, 0.004f));
 
 	// Call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;

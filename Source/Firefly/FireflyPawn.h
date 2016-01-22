@@ -30,6 +30,10 @@ class FIREFLY_API AFireflyPawn : public APawn {
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		UCameraComponent* m_camera;
 
+	/** The point of light emitted by the firefly. */
+	UPROPERTY(Category = Light, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UPointLightComponent* m_light;
+
 public:
 	/** Constructor. */
 	AFireflyPawn();
