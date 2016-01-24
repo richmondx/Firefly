@@ -11,16 +11,21 @@ UFireflyMovementComponent::UFireflyMovementComponent() {
 	m_capsule = nullptr;
 
 	// Set handling parameters.
-	Acceleration = 7000.f;
-	Deceleration = 3000.f;
+	MinAcceleration = 300.f;
+	MaxAcceleration = 7000.f;
+	Acceleration = MinAcceleration;
+	Deceleration = 500.f;
 	MaxSpeed = 700.f;
-	TurnSpeed = 40.f;
+	TurnSpeed = 20.f;
 	m_bSpeeding = false;
 	m_currentForwardSpeed = 0.f;
 	m_currentYawSpeed = 0.f;
 	m_currentPitchSpeed = 0.f;
 	m_currentRollSpeed = 0.f;
-	m_lastOrientation = FRotator::ZeroRotator.Quaternion();
+	m_orientation = FRotator::ZeroRotator;
+
+	// Call Tick() every frame.
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 UFireflyMovementComponent::~UFireflyMovementComponent() {
@@ -47,22 +52,27 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 	m_capsule->AddLocalOffset(FVector(m_currentForwardSpeed * deltaTime, 0.f, 0.f), true);
 
 	// Calculate change in rotation this frame.
-	FRotator deltaRotation(0, 0, 0);
-	deltaRotation.Pitch = m_currentPitchSpeed * deltaTime;
-	deltaRotation.Yaw = m_currentYawSpeed * deltaTime;
-	deltaRotation.Roll = m_currentRollSpeed * deltaTime;
-	m_lastOrientation = deltaRotation.Quaternion() * m_lastOrientation;
-	m_capsule->SetWorldRotation(deltaRotation);
-
-	// Calculate the orientation taking the gravity in account.
-	FVector gravity = -m_planet->GetGravityDirection(m_capsule->GetComponentLocation());
-	const FQuat deltaQuat = FQuat::FindBetween(m_capsule->GetUpVector(), -m_planet->GetGravityDirection(m_capsule->GetComponentLocation()));
+	FVector invGravity = m_planet ? -m_planet->GetGravityDirection(m_capsule->GetComponentLocation()) : FVector(0.f, 0.f, 1.f);
+	const FQuat deltaQuat = FQuat::FindBetween(m_capsule->GetUpVector(), invGravity);
 	const FQuat targetQuat = deltaQuat * m_capsule->GetComponentRotation().Quaternion();
-	m_lastNormal = targetQuat.Rotator();
-	m_capsule->SetWorldRotation(m_lastNormal.Quaternion());
+	m_capsule->SetWorldRotation(targetQuat);
+
+	m_orientation.Pitch += m_currentPitchSpeed * deltaTime;
+	m_orientation.Yaw = m_currentYawSpeed * deltaTime;
+	//m_orientation.Roll = m_currentRollSpeed * deltaTime;
+	m_capsule->AddLocalRotation(m_orientation);
 
 	// Calculate new acceleration and speed.
-	float currentAcc = m_bSpeeding ? Acceleration : -Deceleration;
+	float currentAcc;
+	if (m_bSpeeding) {
+		currentAcc = Acceleration;
+		Acceleration += 500.f * GetWorld()->GetDeltaSeconds();
+	} else {
+		currentAcc = -Deceleration;
+		Acceleration -= 5000.f * GetWorld()->GetDeltaSeconds();
+	}
+
+	Acceleration = FMath::Clamp(Acceleration, MinAcceleration, MaxAcceleration);
 	float newForwardSpeed = m_currentForwardSpeed + (GetWorld()->GetDeltaSeconds() * currentAcc);
 	m_currentForwardSpeed = FMath::Clamp(newForwardSpeed, 0.f, MaxSpeed);
 }
@@ -72,28 +82,30 @@ void UFireflyMovementComponent::SpeedUp(bool bSpeedUp) {
 }
 
 void UFireflyMovementComponent::MoveUp(float value) {
-	float targetPitchSpeed = value * TurnSpeed * -1.f;
-	targetPitchSpeed += FMath::Abs(m_currentYawSpeed) * -0.2f;
+	// Target pitch speed is based in input
+	float TargetPitchSpeed = (value * TurnSpeed * -1.f);
 
-	// Smoothly interpolate to target pitch speed.
-	m_currentPitchSpeed = FMath::FInterpTo(m_currentPitchSpeed, targetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	// When steering, we decrease pitch slightly
+	TargetPitchSpeed += (FMath::Abs(m_currentYawSpeed) * -0.2f);
+
+	// Smoothly interpolate to target pitch speed
+	m_currentPitchSpeed = FMath::FInterpTo(m_currentPitchSpeed, TargetPitchSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
 
 void UFireflyMovementComponent::MoveRight(float value) {
-	// Target yaw speed is based on input.
-	float targetYawSpeed = (value * TurnSpeed);
+	// Target yaw speed is based on input
+	float TargetYawSpeed = (value * TurnSpeed);
 
-	// Smoothly interpolate to target yaw speed.
-	m_currentYawSpeed = FMath::FInterpTo(m_currentYawSpeed, targetYawSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	// Smoothly interpolate to target yaw speed
+	m_currentYawSpeed = FMath::FInterpTo(m_currentYawSpeed, TargetYawSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 
-	// Is there any left/right input ?
+	// Is there any left/right input?
 	const bool bIsTurning = FMath::Abs(value) > 0.2f;
 
-	// If turning, yaw value is used to influence roll.
-	// If not turning, roll to reverse current roll value.
-	float targetRollSpeed = bIsTurning ? (m_currentYawSpeed * 0.5f) : (m_lastOrientation.Rotator().Roll * -2.f);
-	//float targetRollSpeed = bIsTurning ? (m_currentYawSpeed * 0.5f) : (m_capsule->GetComponentRotation().Roll * -2.f);
+	// If turning, yaw value is used to influence roll
+	// If not turning, roll to reverse current roll value
+	float TargetRollSpeed = bIsTurning ? (m_currentYawSpeed * 0.2f) : (m_orientation.Roll * -2.f);
 
 	// Smoothly interpolate roll speed
-	m_currentRollSpeed = FMath::FInterpTo(m_currentRollSpeed, targetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+	m_currentRollSpeed = FMath::FInterpTo(m_currentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }

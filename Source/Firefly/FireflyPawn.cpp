@@ -15,8 +15,8 @@ AFireflyPawn::AFireflyPawn() {
 	//m_capsule->SetSimulatePhysics(true);
 	m_capsule->SetEnableGravity(false);
 	m_capsule->GetBodyInstance()->COMNudge = FVector(0.0f, 0.0f, -96.0f);
-	m_capsule->SetLinearDamping(0.f);
-	m_capsule->SetAngularDamping(0.f);
+	m_capsule->SetLinearDamping(0.15f);
+	m_capsule->SetAngularDamping(0.1f);
 	m_capsule->SetNotifyRigidBodyCollision(true);
 	RootComponent = m_capsule;
 
@@ -48,8 +48,7 @@ AFireflyPawn::AFireflyPawn() {
 	// Create camera component.
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	m_camera->AttachTo(m_springArm, USpringArmComponent::SocketName);
-	m_camera->SetRelativeLocation(FVector(0.0f, 0.0f, 600.0f));
-	m_camera->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 200.0f), FRotator(-90.f, 0.f, 0.f));
+	m_camera->SetRelativeLocationAndRotation(FVector(0.0f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 	m_camera->FieldOfView = 70.f;
 	m_camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
 
@@ -76,6 +75,7 @@ void AFireflyPawn::Tick(float deltaSeconds) {
 }
 
 void AFireflyPawn::NotifyHit(class UPrimitiveComponent* myComp, class AActor* other, class UPrimitiveComponent* otherComp, bool bSelfMoved, FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit) {
+	UE_LOG(LogTemp, Warning, TEXT("Boom"));
 	Super::NotifyHit(myComp, other, otherComp, bSelfMoved, hitLocation, hitNormal, normalImpulse, hit);
 }
 

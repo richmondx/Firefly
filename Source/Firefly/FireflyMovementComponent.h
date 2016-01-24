@@ -50,6 +50,14 @@ public:
 	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
 		float TurnSpeed;
 
+	/** Acceleration minimal value. */
+	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
+		float MinAcceleration;
+
+	/** Acceleration maximal value. */
+	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
+		float MaxAcceleration;
+
 	/** Upgrade or decrease the speed of the firefly. */
 	void SpeedUp(bool bSpeedUp);
 
@@ -75,8 +83,8 @@ private:
 	/** Current roll speed. */
 	float m_currentRollSpeed;
 
-	/** The last orientation of the firefly, relatively to the ground. */
-	FQuat m_lastOrientation;
+	/** The orientation of the firefly, relatively to the ground. */
+	FRotator m_orientation;
 
 	/** The last gravity normal. */
 	FRotator m_lastNormal;
