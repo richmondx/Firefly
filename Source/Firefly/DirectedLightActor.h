@@ -14,6 +14,10 @@ UCLASS()
 class FIREFLY_API ADirectedLightActor : public AActor {
 	GENERATED_BODY()
 
+	/** The directional light. */
+	UPROPERTY(Category = Direction, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UDirectionalLightComponent* m_light;
+
 public:
 	/** Constructor. */
 	ADirectedLightActor();
@@ -28,10 +32,6 @@ public:
 	/** The actor that is considered as the center of the world. */
 	UPROPERTY(Category = Direction, BlueprintReadWrite, EditAnywhere)
 		AActor const* Center;
-
-	/** The directional light. */
-	UPROPERTY(Category = Direction, BlueprintReadOnly)
-		UDirectionalLightComponent* Light;
 
 	// Begin AActor override.
 	/** Recalculate the light direction. */

@@ -10,9 +10,9 @@ UCLASS(config = Game)
 class FIREFLY_API AFireflyPawn : public APawn {
 	GENERATED_BODY()
 
-	/** The capsule component. */
+	/** The sphere component. */
 	UPROPERTY(Category = Movement, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UCapsuleComponent* m_capsule;
+		USphereComponent* m_sphere;
 
 	/** The movement component of the pawn. */
 	UPROPERTY(Category = Movement, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
