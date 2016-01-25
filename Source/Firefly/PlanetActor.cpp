@@ -35,8 +35,8 @@ void APlanetActor::PostInitializeComponents() {
 
 #if WITH_EDITOR
 
-void APlanetActor::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) {
-	Super::PostEditChangeProperty(PropertyChangedEvent);
+void APlanetActor::PostEditChangeProperty(FPropertyChangedEvent& event) {
+	Super::PostEditChangeProperty(event);
 	Initialization();
 }
 

@@ -21,7 +21,7 @@ public:
 
 #if WITH_EDITOR
 	/** Call Initialization(). */
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& event) override;
 #endif // WITH_EDITOR
 
 	/** Link the planet to the pawn. */

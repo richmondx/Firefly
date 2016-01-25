@@ -85,7 +85,4 @@ private:
 
 	/** The orientation of the firefly, relatively to the ground. */
 	FRotator m_orientation;
-
-	/** The last gravity normal. */
-	FRotator m_lastNormal;
 };

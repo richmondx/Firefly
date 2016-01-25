@@ -48,7 +48,7 @@ AFireflyPawn::AFireflyPawn() {
 	// Create camera component.
 	m_camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	m_camera->AttachTo(m_springArm, USpringArmComponent::SocketName);
-	m_camera->SetRelativeLocationAndRotation(FVector(0.0f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
+	m_camera->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f));
 	m_camera->FieldOfView = 70.f;
 	m_camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
 

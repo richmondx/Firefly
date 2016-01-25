@@ -42,7 +42,6 @@ void UFireflyMovementComponent::InitializeComponent() {
 
 void UFireflyMovementComponent::SetPlanet(APlanetActor const* planet) {
 	m_planet = planet;
-	m_lastNormal = (FQuat::FindBetween(m_capsule->GetUpVector(), -m_planet->GetGravityDirection(m_capsule->GetComponentLocation())).Rotator());
 }
 
 void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickType, FActorComponentTickFunction *thisTickFunction) {
