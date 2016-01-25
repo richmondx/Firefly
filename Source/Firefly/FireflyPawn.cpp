@@ -5,25 +5,17 @@
 #include "FireflyMeshComponent.h"
 #include "FireflyMovementComponent.h"
 #include "PlanetActor.h"
+#include "CollisionSphere.h"
 
 AFireflyPawn::AFireflyPawn() {
-	// Create the capsule component of the firefly.
-	m_capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent0"));
-	m_capsule->InitCapsuleSize(42.0f, 42.0f);
-	m_capsule->SetCollisionProfileName(TEXT("Firefly"));
-	//m_capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	//m_capsule->SetSimulatePhysics(true);
-	m_capsule->SetEnableGravity(false);
-	m_capsule->GetBodyInstance()->COMNudge = FVector(0.0f, 0.0f, -96.0f);
-	m_capsule->SetLinearDamping(0.15f);
-	m_capsule->SetAngularDamping(0.1f);
-	m_capsule->SetNotifyRigidBodyCollision(true);
-	RootComponent = m_capsule;
+	// Create the sphere collision component of the firefly.
+	m_sphere = CreateDefaultSubobject<UCollisionSphere>(TEXT("CollisionSphere0"));
+	RootComponent = m_sphere;
 
 	// Create the movement component.
 	m_movement = CreateDefaultSubobject<UFireflyMovementComponent>(TEXT("FireflyMovementComponent0"));
 	m_movement->SetMovementOwner(this);
-	m_movement->SetUpdatedComponent(m_capsule);
+	m_movement->SetUpdatedComponent(m_sphere);
 
 	// Create the mesh component.
 	m_mesh = CreateDefaultSubobject<UFireflyMeshComponent>(TEXT("FireflyMeshComponent0"));
@@ -31,11 +23,11 @@ AFireflyPawn::AFireflyPawn() {
 	m_mesh->SetCollisionProfileName(TEXT("FireflyMesh"));
 	m_mesh->bGenerateOverlapEvents = false;
 	m_mesh->SetNotifyRigidBodyCollision(false);
-	m_mesh->AttachTo(m_capsule);
+	m_mesh->AttachTo(m_sphere);
 
 	// Create a spring arm component.
 	m_springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm0"));
-	m_springArm->AttachTo(m_capsule);
+	m_springArm->AttachTo(m_sphere);
 	m_springArm->TargetArmLength = 0.f; // The camera follows at this distance behind the character	
 	m_springArm->bDoCollisionTest = false;
 	m_springArm->SocketOffset = FVector(0.f, 0.f, 0.f);

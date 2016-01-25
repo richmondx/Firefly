@@ -8,7 +8,7 @@
 UFireflyMovementComponent::UFireflyMovementComponent() {
 	// Set actors and components.
 	m_planet = nullptr;
-	m_capsule = nullptr;
+	m_sphere = nullptr;
 
 	// Set handling parameters.
 	MinAcceleration = 300.f;
@@ -37,7 +37,7 @@ void UFireflyMovementComponent::SetMovementOwner(APawn* owner) {
 
 void UFireflyMovementComponent::InitializeComponent() {
 	Super::InitializeComponent();
-	m_capsule = Cast<UCapsuleComponent>(UpdatedComponent);
+	m_sphere = Cast<USphereComponent>(UpdatedComponent);
 }
 
 void UFireflyMovementComponent::SetPlanet(APlanetActor const* planet) {
@@ -48,18 +48,18 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 	Super::TickComponent(deltaTime, tickType, thisTickFunction);
 
 	// Move plan forwards (with sweep so we stop when we collide with things).
-	m_capsule->AddLocalOffset(FVector(m_currentForwardSpeed * deltaTime, 0.f, 0.f), true);
+	m_sphere->AddLocalOffset(FVector(m_currentForwardSpeed * deltaTime, 0.f, 0.f), true);
 
 	// Calculate change in rotation this frame.
-	FVector invGravity = m_planet ? -m_planet->GetGravityDirection(m_capsule->GetComponentLocation()) : FVector(0.f, 0.f, 1.f);
-	const FQuat deltaQuat = FQuat::FindBetween(m_capsule->GetUpVector(), invGravity);
-	const FQuat targetQuat = deltaQuat * m_capsule->GetComponentRotation().Quaternion();
-	m_capsule->SetWorldRotation(targetQuat);
+	FVector invGravity = m_planet ? -m_planet->GetGravityDirection(m_sphere->GetComponentLocation()) : FVector(0.f, 0.f, 1.f);
+	const FQuat deltaQuat = FQuat::FindBetween(m_sphere->GetUpVector(), invGravity);
+	const FQuat targetQuat = deltaQuat * m_sphere->GetComponentRotation().Quaternion();
+	m_sphere->SetWorldRotation(targetQuat);
 
 	m_orientation.Pitch += m_currentPitchSpeed * deltaTime;
 	m_orientation.Yaw = m_currentYawSpeed * deltaTime;
 	//m_orientation.Roll = m_currentRollSpeed * deltaTime;
-	m_capsule->AddLocalRotation(m_orientation);
+	m_sphere->AddLocalRotation(m_orientation);
 
 	// Calculate new acceleration and speed.
 	float currentAcc;

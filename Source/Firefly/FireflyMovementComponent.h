@@ -15,7 +15,7 @@ class FIREFLY_API UFireflyMovementComponent : public UFloatingPawnMovement {
 	APlanetActor const *m_planet;
 
 	/** The capsule component of the pawn. */
-	UCapsuleComponent* m_capsule;
+	USphereComponent* m_sphere;
 
 public:
 	/** Constructor. */
