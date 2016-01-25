@@ -14,8 +14,6 @@ UFireflyMeshComponent::UFireflyMeshComponent() {
 		}
 	};
 
-	SetRelativeScale3D(FVector(m_size, m_size, m_size));
-
 	static FConstructorStatics ConstructorStatics;
 	SetStaticMesh(ConstructorStatics.mesh.Get());
 }

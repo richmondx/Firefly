@@ -50,6 +50,9 @@ AFireflyPawn::AFireflyPawn() {
 	m_light->SetIntensity(20000.f);
 	m_light->SetLightColor(FLinearColor(1.f, 0.165f, 0.004f));
 
+	// Set initial size.
+	SetActorScale3D(FVector(0.1f, 0.1f, 0.1f));
+
 	// Call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;
 }
