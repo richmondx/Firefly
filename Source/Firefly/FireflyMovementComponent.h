@@ -10,9 +10,6 @@ class APlanetActor;
 UCLASS()
 class FIREFLY_API UFireflyMovementComponent : public UFloatingPawnMovement {
 	GENERATED_BODY()
-	
-	/** The planet actor. */
-	APlanetActor const *m_planet;
 
 	/** The capsule component of the pawn. */
 	USphereComponent* m_sphere;
@@ -27,20 +24,10 @@ public:
 	/** Set the owner of this movement component. */
 	void SetMovementOwner(APawn *owner);
 
-	/** Set the planet actor. */
-	void SetPlanet(APlanetActor const *planet);
-
 	// Begin UActorComponent Interface
 	virtual void InitializeComponent() override;
 	virtual void TickComponent(float deltaTime, enum ELevelTick tickType, FActorComponentTickFunction *thisTickFunction) override;
 	// End UActorComponent Interface
-	
-	/** Called when the collision capsule touches another primitive component. */
-	//void NotifyCapsuleHit(UPrimitiveComponent* myComp, AActor* other, UPrimitiveComponent* otherComp, bool bSelfMoved, 
-	//		FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit);
-
-	/** Update the orientation of the firefly to fit the gravity direction. */
-	//void ApplyGravity(const FVector& force, bool bAllowSubstepping, bool bAccelChange);
 
 	/** Information about the surface the pawn collided with. */
 	UPROPERTY(Category = "Firefly Movement Component", VisibleInstanceOnly, BlueprintReadOnly)

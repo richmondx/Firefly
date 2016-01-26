@@ -4,6 +4,8 @@
 #include "PlanetActor.h"
 #include "FireflyPawn.h"
 
+APlanetActor const* APlanetActor::m_planet = nullptr;
+
 APlanetActor::APlanetActor() {
 	// Create the scene component.
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent0"));
@@ -49,20 +51,22 @@ void APlanetActor::Initialization() {
 	}
 
 	MeshComponent->SetRelativeScale3D(PlanetMeshScale);
-}
 
-void APlanetActor::BeginPlay() {
-	// Get the firefly and set the gravity onto it.
-	AFireflyPawn* firefly = Cast<AFireflyPawn>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	firefly->SetPlanet(this);
+	if (m_planet) {
+		UE_LOG(LogTemp, Warning, TEXT("A PlanetActor has already been referenced."));
+	}
+	
+	m_planet = this;
 }
 
 FVector APlanetActor::GetGravityDirection(const FVector& targetLocation) const {
 	return (GetActorLocation() - targetLocation).GetSafeNormal();
 }
 
-void  APlanetActor::SetGravityPower(float newGravity) {
+void APlanetActor::SetGravityPower(float newGravity) {
 	GravityPower = newGravity;
 }
 
-
+FVector APlanetActor::GetGravity(const FVector& targetLocation) {
+	return m_planet ? m_planet->GetGravityDirection(targetLocation) : FVector(0.f, 0.f, -1.f);
+}

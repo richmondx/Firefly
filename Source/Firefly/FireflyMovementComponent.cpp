@@ -3,11 +3,10 @@
 #include "Firefly.h"
 #include "FireflyMovementComponent.h"
 #include "FireflyPawn.h"
-#include "PlanetActor.h"
+#include "GravityManager.h"
 
 UFireflyMovementComponent::UFireflyMovementComponent() {
 	// Set actors and components.
-	m_planet = nullptr;
 	m_sphere = nullptr;
 
 	// Set handling parameters.
@@ -40,10 +39,6 @@ void UFireflyMovementComponent::InitializeComponent() {
 	m_sphere = Cast<USphereComponent>(UpdatedComponent);
 }
 
-void UFireflyMovementComponent::SetPlanet(APlanetActor const* planet) {
-	m_planet = planet;
-}
-
 void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickType, FActorComponentTickFunction *thisTickFunction) {
 	Super::TickComponent(deltaTime, tickType, thisTickFunction);
 
@@ -51,10 +46,7 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 	m_sphere->AddLocalOffset(FVector(m_currentForwardSpeed * deltaTime, 0.f, 0.f), true);
 
 	// Calculate change in rotation this frame.
-	FVector invGravity = m_planet ? -m_planet->GetGravityDirection(m_sphere->GetComponentLocation()) : FVector(0.f, 0.f, 1.f);
-	const FQuat deltaQuat = FQuat::FindBetween(m_sphere->GetUpVector(), invGravity);
-	const FQuat targetQuat = deltaQuat * m_sphere->GetComponentRotation().Quaternion();
-	m_sphere->SetWorldRotation(targetQuat);
+	AGravityManager::RotateComponentAlongGravityDirection(m_sphere);
 
 	m_orientation.Pitch += m_currentPitchSpeed * deltaTime;
 	m_orientation.Yaw = m_currentYawSpeed * deltaTime;
