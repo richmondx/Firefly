@@ -41,9 +41,6 @@ public:
 	/** Destructor. */
 	virtual ~AFireflyPawn();
 
-	/** Set the planet for this character. */
-	void SetPlanet(APlanetActor const *planet);
-
 	// Begin AActor overrides.
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void NotifyHit(class UPrimitiveComponent* myComp, class AActor* other, class UPrimitiveComponent* otherComp, bool bSelfMoved, FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit);
@@ -66,7 +63,7 @@ protected:
 	void MoveRightInput(float value);
 
 public:
-	/** Returns PlaneMesh subobject **/
+	/** Returns FireflyMesh subobject **/
 	FORCEINLINE class UStaticMeshComponent* GetMesh() const { return m_mesh; }
 	/** Returns SpringArm subobject **/
 	FORCEINLINE class USpringArmComponent* GetSpringArm() const { return m_springArm; }
