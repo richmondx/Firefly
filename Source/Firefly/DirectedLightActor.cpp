@@ -5,7 +5,7 @@
 
 ADirectedLightActor::ADirectedLightActor() {
 	// Creation of the light component.
-	m_light = CreateDefaultSubobject<UDirectionalLightComponent>(TEXT("DirectionalLightComponent0"));
+	m_light = CreateDefaultSubobject<UDirectionalLightComponent>(TEXT("DirectionalLightComponent1"));
 	RootComponent = m_light;
 
 	Target = nullptr;
