@@ -15,8 +15,4 @@ public:
 
 	/** Destructor. */
 	virtual ~UFireflyMeshComponent();
-		
-private:
-	/** The scale of the mesh. */
-	float m_size = 0.2f;
 };
