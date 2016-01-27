@@ -108,7 +108,9 @@ void AFireflyPawn::MoveRightInput(float value) {
 
 void AFireflyPawn::RecalibrateHMD() {
 	FVector position;
-	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_zeroHMD, position);
+	if (UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled()) {
+		UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(m_zeroHMD, position);
+	}
 }
 
 void AFireflyPawn::OrientateCameraAlongHMD() {
@@ -116,5 +118,5 @@ void AFireflyPawn::OrientateCameraAlongHMD() {
 	FVector position;
 
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(orientation, position);
-	m_camera->SetRelativeRotation(UKismetMathLibrary::NormalizedDeltaRotator(m_zeroHMD, orientation));
+	m_camera->SetRelativeRotation(UKismetMathLibrary::NormalizedDeltaRotator(orientation, m_zeroHMD));
 }
