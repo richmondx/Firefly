@@ -5,7 +5,7 @@
 #include "FireflyMeshComponent.h"
 #include "FireflyMovementComponent.h"
 #include "CollisionSphere.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
+#include "Kismet/HeadMountedDisplayFunctionLibrary.h"
 
 AFireflyPawn::AFireflyPawn() {
 	// Create the sphere collision component of the firefly.
