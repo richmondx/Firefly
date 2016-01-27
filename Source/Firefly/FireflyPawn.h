@@ -34,6 +34,9 @@ class FIREFLY_API AFireflyPawn : public APawn {
 	UPROPERTY(Category = Light, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		UPointLightComponent* m_light;
 
+	/** The default orientation of the HMD. */
+	FRotator m_zeroHMD;
+
 public:
 	/** Constructor. */
 	AFireflyPawn();
@@ -42,6 +45,7 @@ public:
 	virtual ~AFireflyPawn();
 
 	// Begin AActor overrides.
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void NotifyHit(class UPrimitiveComponent* myComp, class AActor* other, class UPrimitiveComponent* otherComp, bool bSelfMoved, FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit);
 	// End AActor overrides.
@@ -55,6 +59,9 @@ protected:
 	/** As long as requested, increase the speed of the pawn. */
 	void StartSpeedUp();
 	void StopSpeedUp();
+
+	/** Recalibrate the HMD orientation. */
+	void RecalibrateHMD();
 
 	/** Bound to the vertical axis */
 	UFUNCTION(BlueprintCallable, Category = "Movement")
