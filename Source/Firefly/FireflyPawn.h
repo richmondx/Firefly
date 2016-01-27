@@ -60,7 +60,8 @@ protected:
 	void MoveUpInput(float value);
 
 	/** Bound to the horizontal axis */
-	void MoveRightInput(float value);
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void MoveRightInput(float value);
 
 public:
 	/** Returns FireflyMesh subobject **/
