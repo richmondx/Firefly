@@ -57,11 +57,16 @@ protected:
 	void StopSpeedUp();
 
 	/** Bound to the vertical axis */
-	void MoveUpInput(float value);
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void MoveUpInput(float value);
 
 	/** Bound to the horizontal axis */
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 		void MoveRightInput(float value);
+
+	/** Match the orientation of the camera with the one of the HMD. */
+	UFUNCTION(BlueprintCallable, Category = "HMDOrientation")
+		void OrientateCameraAlongHMD();
 
 public:
 	/** Returns FireflyMesh subobject **/

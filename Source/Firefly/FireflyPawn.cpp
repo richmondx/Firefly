@@ -5,6 +5,7 @@
 #include "FireflyMeshComponent.h"
 #include "FireflyMovementComponent.h"
 #include "CollisionSphere.h"
+#include "HeadMountedDisplayFunctionLibrary.h"
 
 AFireflyPawn::AFireflyPawn() {
 	// Create the sphere collision component of the firefly.
@@ -95,4 +96,12 @@ void AFireflyPawn::MoveUpInput(float value) {
 
 void AFireflyPawn::MoveRightInput(float value) {
 	m_movement->MoveRight(value);
+}
+
+void AFireflyPawn::OrientateCameraAlongHMD() {
+	FRotator orientation;
+	FVector position;
+
+	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(orientation, position);
+	m_camera->SetRelativeRotation(orientation);
 }
