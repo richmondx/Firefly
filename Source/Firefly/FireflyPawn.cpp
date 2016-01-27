@@ -4,7 +4,6 @@
 #include "FireflyPawn.h"
 #include "FireflyMeshComponent.h"
 #include "FireflyMovementComponent.h"
-#include "PlanetActor.h"
 #include "CollisionSphere.h"
 
 AFireflyPawn::AFireflyPawn() {
@@ -58,10 +57,6 @@ AFireflyPawn::AFireflyPawn() {
 }
 
 AFireflyPawn::~AFireflyPawn() {
-}
-
-void AFireflyPawn::SetPlanet(APlanetActor const *planet) {
-	m_movement->SetPlanet(planet);
 }
 
 void AFireflyPawn::Tick(float deltaSeconds) {

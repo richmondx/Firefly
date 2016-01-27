@@ -8,6 +8,9 @@ UCLASS()
 class FIREFLY_API APlanetActor: public AActor {
 	GENERATED_BODY()
 
+	/** The planet instance. */
+	static APlanetActor const* m_planet;
+
 public:
 	/** Constructor. */
 	APlanetActor();
@@ -23,10 +26,6 @@ public:
 	/** Call Initialization(). */
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& event) override;
 #endif // WITH_EDITOR
-
-	/** Link the planet to the pawn. */
-	virtual void BeginPlay() override;
-	// End of AActor interface
 
 	/** Planet static mesh. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planet Actor : General Settings")
@@ -51,6 +50,10 @@ public:
 	/** Return a specific gravity direction based on the target location. */
 	UFUNCTION(BlueprintCallable, Category = "PlanetActor")
 		FVector GetGravityDirection(const FVector& targetLocation) const;
+
+	/** Return the direction of the gravity. */
+	UFUNCTION(BlueprintCallable, Category = "PlanetActor")
+		static FVector GetGravity(const FVector& targetLocation);
 
 private:
 	/** The root component of the planet. */
