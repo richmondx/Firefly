@@ -54,6 +54,14 @@ public:
 	virtual UPawnMovementComponent* GetMovementComponent() const override;
 	// End APawn overrides.
 
+	/** Boost the speed of the firefly. */
+	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
+		void Boost();
+
+	/** Brake the firefly. */
+	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
+		void Brake();
+
 protected:
 	// Begin APawn overrides.
 	/** Allows binding actions/axes to functions. */
@@ -72,14 +80,6 @@ protected:
 
 	/** Bound to the horizontal axis */
 	void MoveRightInput(float value);
-
-	/** Boost the speed of the firefly. */
-	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
-		void Boost();
-
-	/** Brake the firefly. */
-	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
-		void Brake();
 
 	/** Match the orientation of the camera with the one of the HMD. */
 	UFUNCTION(BlueprintCallable, Category = "HMDOrientation")

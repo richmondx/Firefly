@@ -6,9 +6,9 @@
 
 AFireflyGameMode::AFireflyGameMode() {
 	// Set the default pawn class to FireflyPawn.
-	static ConstructorHelpers::FObjectFinder<UBlueprint> Blueprint(TEXT("Blueprint'/Game/blueprints/FireflyPawn_BP.FireflyPawn_BP'"));
+	static ConstructorHelpers::FObjectFinder<UClass> Blueprint(TEXT("Class'/Game/blueprints/FireflyPawn_BP.FireflyPawn_BP_C'"));
 	if (Blueprint.Object) {
-		DefaultPawnClass = (UClass*)Blueprint.Object->GeneratedClass;
+		DefaultPawnClass = Blueprint.Object;
 	} else {
 		DefaultPawnClass = AFireflyPawn::StaticClass();
 	}
