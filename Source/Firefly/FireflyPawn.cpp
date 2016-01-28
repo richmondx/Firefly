@@ -71,7 +71,6 @@ void AFireflyPawn::Tick(float deltaSeconds) {
 }
 
 void AFireflyPawn::NotifyHit(class UPrimitiveComponent* myComp, class AActor* other, class UPrimitiveComponent* otherComp, bool bSelfMoved, FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit) {
-	UE_LOG(LogTemp, Warning, TEXT("Boom"));
 	Super::NotifyHit(myComp, other, otherComp, bSelfMoved, hitLocation, hitNormal, normalImpulse, hit);
 }
 
@@ -104,6 +103,14 @@ void AFireflyPawn::MoveUpInput(float value) {
 
 void AFireflyPawn::MoveRightInput(float value) {
 	m_movement->MoveRight(value);
+}
+
+void AFireflyPawn::Boost() {
+	m_movement->Boost();
+}
+
+void AFireflyPawn::Brake() {
+	m_movement->Brake();
 }
 
 void AFireflyPawn::RecalibrateHMD() {

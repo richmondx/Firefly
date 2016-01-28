@@ -10,14 +10,17 @@ UFireflyMovementComponent::UFireflyMovementComponent() {
 	m_sphere = nullptr;
 
 	// Set handling parameters.
-	MinAcceleration = 300.f;
-	MaxAcceleration = 7000.f;
-	Acceleration = MinAcceleration;
-	Deceleration = 500.f;
-	MaxSpeed = 700.f;
+	Acceleration = 2.f;
+	Deceleration = 2.f;
+
+	MMaxSpeed = 700.f;
+	MMinSpeed = 200.f;
+	MaxSpeed = 400.f;
+	Variation = 50.f;
 	TurnSpeed = 20.f;
 	m_bSpeeding = false;
-	m_currentForwardSpeed = 0.f;
+
+	m_currentSpeed = 0.f;
 	m_currentYawSpeed = 0.f;
 	m_currentPitchSpeed = 0.f;
 	m_currentRollSpeed = 0.f;
@@ -43,7 +46,7 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 	Super::TickComponent(deltaTime, tickType, thisTickFunction);
 
 	// Move plan forwards (with sweep so we stop when we collide with things).
-	m_sphere->AddLocalOffset(FVector(m_currentForwardSpeed * deltaTime, 0.f, 0.f), true);
+	m_sphere->AddLocalOffset(FVector(m_currentSpeed * deltaTime, 0.f, 0.f), true);
 
 	// Calculate change in rotation this frame.
 	AGravityManager::RotateComponentAlongGravityDirection(m_sphere);
@@ -54,22 +57,48 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 	m_sphere->AddLocalRotation(m_orientation);
 
 	// Calculate new acceleration and speed.
-	float currentAcc;
+	float newSpeed;
+	
 	if (m_bSpeeding) {
-		currentAcc = Acceleration;
-		Acceleration += 500.f * GetWorld()->GetDeltaSeconds();
+		if (m_currentSpeed < 50.f) {
+			m_currentSpeed = 50.f;
+		}
+
+		if (m_currentSpeed < MaxSpeed / 3.f) {
+			newSpeed = m_currentSpeed * (1.f + GetWorld()->GetDeltaSeconds() * Acceleration);
+		} else if (m_currentSpeed < MaxSpeed) {
+			newSpeed = m_currentSpeed * (1.f + GetWorld()->GetDeltaSeconds() * 3.f / 2.f * Acceleration * (1.f - m_currentSpeed / MaxSpeed));
+		} else {
+			newSpeed = FMath::FInterpTo(m_currentSpeed, MaxSpeed, GetWorld()->GetDeltaSeconds(), 0.3f);
+		}
+
 	} else {
-		currentAcc = -Deceleration;
-		Acceleration -= 5000.f * GetWorld()->GetDeltaSeconds();
+		if (m_currentSpeed < 50.f) {
+			newSpeed = 0.f;
+		} else {
+			newSpeed = m_currentSpeed * (1.f - GetWorld()->GetDeltaSeconds() * Deceleration);
+		}
 	}
 
-	Acceleration = FMath::Clamp(Acceleration, MinAcceleration, MaxAcceleration);
-	float newForwardSpeed = m_currentForwardSpeed + (GetWorld()->GetDeltaSeconds() * currentAcc);
-	m_currentForwardSpeed = FMath::Clamp(newForwardSpeed, 0.f, MaxSpeed);
+	m_currentSpeed = newSpeed;
 }
 
 void UFireflyMovementComponent::SpeedUp(bool bSpeedUp) {
 	m_bSpeeding = bSpeedUp;
+}
+
+void UFireflyMovementComponent::Boost() {
+	if (MaxSpeed < MMaxSpeed) {
+		MaxSpeed = FMath::Min(MaxSpeed + Variation, MMaxSpeed);
+		m_currentSpeed = 1.5f * MaxSpeed;
+	}
+}
+
+void UFireflyMovementComponent::Brake() {
+	if (MaxSpeed > MMinSpeed) {
+		MaxSpeed = FMath::Max(MaxSpeed - Variation, MMinSpeed);
+		m_currentSpeed = m_currentSpeed * 0.4f;
+	}
 }
 
 void UFireflyMovementComponent::MoveUp(float value) {

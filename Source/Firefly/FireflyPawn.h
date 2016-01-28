@@ -64,12 +64,18 @@ protected:
 	void RecalibrateHMD();
 
 	/** Bound to the vertical axis */
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-		void MoveUpInput(float value);
+	void MoveUpInput(float value);
 
 	/** Bound to the horizontal axis */
-	UFUNCTION(BlueprintCallable, Category = "Movement")
-		void MoveRightInput(float value);
+	void MoveRightInput(float value);
+
+	/** Boost the speed of the firefly. */
+	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
+		void Boost();
+
+	/** Brake the firefly. */
+	UFUNCTION(BlueprintCallable, Category = "Speed Variation")
+		void Brake();
 
 	/** Match the orientation of the camera with the one of the HMD. */
 	UFUNCTION(BlueprintCallable, Category = "HMDOrientation")

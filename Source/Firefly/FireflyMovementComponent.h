@@ -45,8 +45,26 @@ public:
 	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
 		float MaxAcceleration;
 
+	/** Upper bound for max speed. */
+	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
+		float MMaxSpeed;
+
+	/** The max speed variation when boosting or braking. */
+	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
+		float Variation;
+
+	/** Lower bound for max speed. */
+	UPROPERTY(Category = "Firefly Movement Component", EditAnywhere)
+		float MMinSpeed;
+
 	/** Upgrade or decrease the speed of the firefly. */
 	void SpeedUp(bool bSpeedUp);
+
+	/** Boost the firefly. */
+	void Boost();
+
+	/** Brake the firefly. */
+	void Brake();
 
 	/** Move the firefly up or down. */
 	void MoveUp(float value);
@@ -59,7 +77,7 @@ private:
 	bool m_bSpeeding;
 
 	/** Current forward speed. */
-	float m_currentForwardSpeed;
+	float m_currentSpeed;
 
 	/** Current yaw speed. */
 	float m_currentYawSpeed;
