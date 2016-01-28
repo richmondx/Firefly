@@ -45,8 +45,16 @@ void UFireflyMovementComponent::InitializeComponent() {
 void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickType, FActorComponentTickFunction *thisTickFunction) {
 	Super::TickComponent(deltaTime, tickType, thisTickFunction);
 
-	// Move plan forwards (with sweep so we stop when we collide with things).
-	m_sphere->AddLocalOffset(FVector(m_currentSpeed * deltaTime, 0.f, 0.f), true);
+	// Make the pawn slide along the surfaces.
+	FVector move = m_sphere->GetForwardVector() * deltaTime * m_currentSpeed;
+	if (!move.IsNearlyZero()) {
+		FHitResult hit;
+		SafeMoveUpdatedComponent(move, m_sphere->GetComponentRotation(), true, hit);
+
+		if (hit.IsValidBlockingHit()) {
+			SlideAlongSurface(move, 1.f - hit.Time, hit.Normal, hit);
+		}
+	}
 
 	// Calculate change in rotation this frame.
 	AGravityManager::RotateComponentAlongGravityDirection(m_sphere);

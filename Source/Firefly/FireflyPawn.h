@@ -50,6 +50,10 @@ public:
 	virtual void NotifyHit(class UPrimitiveComponent* myComp, class AActor* other, class UPrimitiveComponent* otherComp, bool bSelfMoved, FVector hitLocation, FVector hitNormal, FVector normalImpulse, const FHitResult& hit);
 	// End AActor overrides.
 
+	// Begin APawn overrides.
+	virtual UPawnMovementComponent* GetMovementComponent() const override;
+	// End APawn overrides.
+
 protected:
 	// Begin APawn overrides.
 	/** Allows binding actions/axes to functions. */

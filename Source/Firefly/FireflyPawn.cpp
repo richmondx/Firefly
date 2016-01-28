@@ -74,6 +74,10 @@ void AFireflyPawn::NotifyHit(class UPrimitiveComponent* myComp, class AActor* ot
 	Super::NotifyHit(myComp, other, otherComp, bSelfMoved, hitLocation, hitNormal, normalImpulse, hit);
 }
 
+UPawnMovementComponent* AFireflyPawn::GetMovementComponent() const {
+	return m_movement;
+}
+
 void AFireflyPawn::SetupPlayerInputComponent(class UInputComponent* inputComponent) {
 	check(inputComponent);
 
