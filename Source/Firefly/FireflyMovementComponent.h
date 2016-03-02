@@ -72,6 +72,9 @@ public:
 	/** Move the firefly left or right. */
 	void MoveRight(float value);
 
+	/** Change the orientation of the pawn. */
+	void Reorientate(FRotator const &delta);
+
 private:
 	/** State whether the pawn should increase its speed. */
 	bool m_bSpeeding;

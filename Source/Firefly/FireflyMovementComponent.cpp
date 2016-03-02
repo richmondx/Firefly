@@ -137,3 +137,7 @@ void UFireflyMovementComponent::MoveRight(float value) {
 	// Smoothly interpolate roll speed
 	m_currentRollSpeed = FMath::FInterpTo(m_currentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }
+
+void UFireflyMovementComponent::Reorientate(FRotator const &delta) {
+	m_sphere->AddLocalRotation(delta);
+}
