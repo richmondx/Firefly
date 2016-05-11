@@ -139,6 +139,7 @@ void AFireflyPawn::OrientateCameraAlongHMD() {
 	FVector position;
 
 	UHeadMountedDisplayFunctionLibrary::GetOrientationAndPosition(orientation, position);
+	orientation.Pitch = -orientation.Pitch;
 	m_movement->Reorientate(UKismetMathLibrary::NormalizedDeltaRotator(orientation, m_zeroHMD));
 	m_zeroHMD = orientation;
 }
