@@ -91,6 +91,9 @@ private:
 	/** Current roll speed. */
 	float m_currentRollSpeed;
 
+	/** HMD roll value. */
+	float m_rollHMD;
+
 	/** The orientation of the firefly, relatively to the ground. */
 	FRotator m_orientation;
 };

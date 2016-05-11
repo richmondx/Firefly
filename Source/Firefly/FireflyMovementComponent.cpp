@@ -25,6 +25,7 @@ UFireflyMovementComponent::UFireflyMovementComponent() {
 	m_currentPitchSpeed = 0.f;
 	m_currentRollSpeed = 0.f;
 	m_orientation = FRotator::ZeroRotator;
+	m_rollHMD = 0.f;
 
 	// Call Tick() every frame.
 	PrimaryComponentTick.bCanEverTick = true;
@@ -61,7 +62,8 @@ void UFireflyMovementComponent::TickComponent(float deltaTime, ELevelTick tickTy
 
 	m_orientation.Pitch += m_currentPitchSpeed * deltaTime;
 	m_orientation.Yaw = m_currentYawSpeed * deltaTime;
-	//m_orientation.Roll = m_currentRollSpeed * deltaTime;
+	m_orientation.Roll = m_rollHMD;
+	m_rollHMD = 0.f;
 	m_sphere->AddLocalRotation(m_orientation);
 
 	// Calculate new acceleration and speed.
@@ -139,5 +141,6 @@ void UFireflyMovementComponent::MoveRight(float value) {
 }
 
 void UFireflyMovementComponent::Reorientate(FRotator const &delta) {
-	m_sphere->AddLocalRotation(delta);
+	m_sphere->AddLocalRotation(FRotator(delta.Pitch, delta.Yaw, 0));
+	m_rollHMD += delta.Roll;
 }
