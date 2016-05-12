@@ -1,0 +1,9 @@
+Intermediate/
+Binaries/
+Build/
+.vs/
+*.sdf
+*.sln
+*.cs
+Saved/
+*.uproject
