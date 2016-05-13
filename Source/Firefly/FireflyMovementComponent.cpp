@@ -13,10 +13,10 @@ UFireflyMovementComponent::UFireflyMovementComponent() {
 	Acceleration = 2.f;
 	Deceleration = 2.f;
 
-	MMaxSpeed = 700.f;
+	MMaxSpeed = 1000.f;
 	MMinSpeed = 200.f;
 	MaxSpeed = 400.f;
-	Variation = 50.f;
+	Variation = 70.f;
 	TurnSpeed = 20.f;
 	m_bSpeeding = false;
 
@@ -100,14 +100,14 @@ void UFireflyMovementComponent::SpeedUp(bool bSpeedUp) {
 void UFireflyMovementComponent::Boost() {
 	if (MaxSpeed < MMaxSpeed) {
 		MaxSpeed = FMath::Min(MaxSpeed + Variation, MMaxSpeed);
-		m_currentSpeed = 1.5f * MaxSpeed;
+		m_currentSpeed = 1.5f * m_currentSpeed;
 	}
 }
 
 void UFireflyMovementComponent::Brake() {
 	if (MaxSpeed > MMinSpeed) {
 		MaxSpeed = FMath::Max(MaxSpeed - Variation, MMinSpeed);
-		m_currentSpeed = m_currentSpeed * 0.4f;
+		m_currentSpeed = m_currentSpeed * 0.7f;
 	}
 }
 
